@@ -1,8 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Enable CORS
+app.use(cors());
 
 // Middleware to parse JSON requests
 app.use(bodyParser.json());
@@ -36,9 +40,9 @@ app.post('/bfhl', (req, res) => {
 
     res.json({
         is_success: true,
-        user_id: "om_sai_vasireddy_22042004",
-        email: "omsaivasireddy@gmail.com",
-        roll_number: "AP21110011282",
+        user_id: "john_doe_17091999",
+        email: "john@xyz.com",
+        roll_number: "ABCD123",
         numbers,
         alphabets,
         highest_alphabet: alphabets.sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' })).slice(-1)
