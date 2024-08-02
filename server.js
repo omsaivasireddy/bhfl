@@ -10,9 +10,9 @@ app.post('/bhfl', (req, res) => {
         return res.status(400).json({ is_success: false, message: 'Invalid input' });
     }
 
-    const user_id = "john_doe_17091999";
-    const email = "john@xyz.com";
-    const roll_number = "ABCD123";
+    const user_id = "omsai22";
+    const email = "omsaivasireddy@gmail.com";
+    const roll_number = "AP21110011282";
     const numbers = [];
     const alphabets = [];
 
