@@ -1,6 +1,6 @@
 let express = require('express');
 let app = express();
-let port = 8080;
+let port = process.env.PORT || 8080;
 app.get('/bhfl', (req, res) => {
     res.status(200).json({ operation_code: 1 });
 });
@@ -36,5 +36,5 @@ app.post('/bhfl', (req, res) => {
     });
 });
 app.listen(port, () => {
-    console.log('Server is running on port ${port}');
+    console.log('Server is running on port ', port);
 });
