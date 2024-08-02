@@ -1,38 +1,39 @@
 const express = require('express');
-const cors = require('cors');
+const bodyParser = require('body-parser');
+
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(cors()); // Allow requests from other origins
-app.use(express.json()); // Parse JSON bodies
+// Middleware to parse JSON requests
+app.use(bodyParser.json());
 
-// POST endpoint
+// POST endpoint to handle the data
 app.post('/bfhl', (req, res) => {
-    const { data } = req.body;
+    let requestData;
 
-    if (!Array.isArray(data)) {
+    // Try to parse the input JSON
+    try {
+        requestData = JSON.parse(JSON.stringify(req.body));
+    } catch (error) {
         return res.status(400).json({
             is_success: false,
-            user_id: "om_sai_vasireddy_22042004",
-            email: "omsaivasireddy@gmail.com",
-            roll_number: "AP21110011282",
-            numbers: [],
-            alphabets: [],
-            highest_alphabet: []
+            message: 'Invalid JSON format'
         });
     }
 
-    // Separate numbers and alphabets
+    const { data } = requestData;
+
+    // Check if 'data' is an array
+    if (!data || !Array.isArray(data)) {
+        return res.status(400).json({
+            is_success: false,
+            message: 'Invalid input format, "data" should be an array'
+        });
+    }
+
     const numbers = data.filter(item => !isNaN(item));
     const alphabets = data.filter(item => isNaN(item));
 
-    // Find the highest alphabet
-    const highestAlphabet = alphabets.length
-        ? [alphabets.reduce((a, b) => a > b ? a : b)]
-        : [];
-
-    // Response
     res.json({
         is_success: true,
         user_id: "om_sai_vasireddy_22042004",
@@ -40,16 +41,18 @@ app.post('/bfhl', (req, res) => {
         roll_number: "AP21110011282",
         numbers,
         alphabets,
-        highest_alphabet: highestAlphabet
+        highest_alphabet: alphabets.sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' })).slice(-1)
     });
 });
 
-// GET endpoint
+// GET endpoint to return the operation code
 app.get('/bfhl', (req, res) => {
-    res.status(200).json({ operation_code: 1 });
+    res.status(200).json({
+        operation_code: 1
+    });
 });
 
-// Start server
+// Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
